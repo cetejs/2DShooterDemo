@@ -126,6 +126,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pref_Flash
       objectReference: {fileID: 0}
+    - target: {fileID: 2476123985083199139, guid: 988b3034a3d91f348872ff6d1e148397,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5770500528320239668, guid: 988b3034a3d91f348872ff6d1e148397,
         type: 3}
       propertyPath: m_LocalPosition.x
