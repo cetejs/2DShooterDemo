@@ -32,11 +32,12 @@ namespace Mechanics
         [SerializeField]
         protected Vector2 m_Velocity;
 
-        private float m_ShellRadius = 0.01f;
-        private float m_MinMoveDistance = 0.001f;
         private Rigidbody2D m_Rigidbody2D;
         private ContactFilter2D m_ContactFilter2D;
         private RaycastHit2D[] m_HitBuffer = new RaycastHit2D[16];
+
+        private const float ShellRadius = 0.01f;
+        private const float MinMoveDistance = 0.001f;
 
         /// <summary>
         /// 传送到指定地点
@@ -103,9 +104,9 @@ namespace Mechanics
         {
             float distance = move.magnitude;
 
-            if (distance > m_MinMoveDistance)
+            if (distance > MinMoveDistance)
             {
-                int count = m_Rigidbody2D.Cast(move, m_ContactFilter2D, m_HitBuffer, distance + m_ShellRadius);
+                int count = m_Rigidbody2D.Cast(move, m_ContactFilter2D, m_HitBuffer, distance + ShellRadius);
 
                 for (int i = 0; i < count; i++)
                 {
@@ -140,7 +141,7 @@ namespace Mechanics
 
                     //上面进行投射时加上了ShellRadius，需要减去获得实际距离
                     //如果碰撞的距离过小时，会获得负值，如果移动方向是向下的，会向上移动
-                    float modifiedDistance = m_HitBuffer[i].distance - m_ShellRadius;
+                    float modifiedDistance = m_HitBuffer[i].distance - ShellRadius;
                     distance = Mathf.Min(modifiedDistance, distance);
                 }
             }
