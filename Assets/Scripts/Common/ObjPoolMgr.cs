@@ -68,7 +68,7 @@ namespace Common
         public void RecycleObj(GameObject obj)
         {
             string objName = obj.name;
-            string prefName = objName.Substring(0, objName.IndexOf('_'));
+            string prefName = objName.Substring(0, objName.IndexOf('-'));
 
             if (m_ObjPoolDict.TryGetValue(prefName, out ObjPool objPool))
             {

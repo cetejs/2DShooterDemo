@@ -150,7 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7bf176f9c7ed849a9307e123e17dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
+  playerController: {fileID: 627596345}
+  shakeCamera: {fileID: 1255010408}
 --- !u!4 &229813986
 Transform:
   m_ObjectHideFlags: 0
@@ -174,10 +175,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1928521646, guid: 11b561c2a863f57448e26f24fb38f213, type: 3}
-      propertyPath: randomAngleRange
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 983010633608720225, guid: 11b561c2a863f57448e26f24fb38f213,
         type: 3}
       propertyPath: m_Name
@@ -246,6 +243,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 382483816}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &627596345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8504956985895588737, guid: 11b561c2a863f57448e26f24fb38f213,
+    type: 3}
+  m_PrefabInstance: {fileID: 382483816}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41519d2d32fe4aa428333ef49452bb9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &967551292
 GameObject:
   m_ObjectHideFlags: 0

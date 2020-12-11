@@ -153,4 +153,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db220707ea96e946ab20e516dc8661d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  launchSpeed: 10
+  launchSpeed: 15
+  hitPrefName: pref_Hit

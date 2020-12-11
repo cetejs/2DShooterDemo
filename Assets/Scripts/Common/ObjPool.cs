@@ -31,7 +31,7 @@ namespace Common
             if (m_ObjQueue.Count <= 0)
             {
                 obj = Object.Instantiate(m_Prefab, ObjPoolMgr.Instance.transform);
-                obj.name = string.Format("{0}_{1}", m_PrefName, ++m_Count);
+                obj.name = string.Format("{0}-{1}", m_PrefName, ++m_Count);
             }
             else
             {

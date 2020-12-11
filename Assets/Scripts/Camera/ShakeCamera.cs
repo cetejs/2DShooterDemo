@@ -27,9 +27,9 @@ namespace Camera
         }
 
         /// <summary>
-        /// 枪械射击震动
+        /// 枪械开火震动
         /// </summary>
-        public void ShootShake()
+        public void FireShake()
         {
             Shake(2, 0.2f);
         }

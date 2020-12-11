@@ -61,7 +61,7 @@ namespace Mechanics
                 {
                     m_IsStopJump = true;
                 }
-                else if (Input.GetButtonDown("Fire1"))
+                else if (Input.GetButton("Fire1"))
                 {
                     if (m_Gun != null)
                     {
