@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Weapon;
 
 namespace Mechanics
 {
@@ -29,6 +30,7 @@ namespace Mechanics
 
         private Animator m_Animator;
         private Collider2D m_Collider2d;
+        private IGun m_Gun;
 
         private bool m_IsJumped;
         private bool m_IsStopJump;
@@ -41,6 +43,7 @@ namespace Mechanics
         {
             m_Animator = GetComponent<Animator>();
             m_Collider2d = GetComponent<Collider2D>();
+            m_Gun = GetComponentInChildren<IGun>();
 
             base.Awake();
         }
@@ -57,6 +60,17 @@ namespace Mechanics
                 else if (Input.GetButtonUp("Jump"))
                 {
                     m_IsStopJump = true;
+                }
+                else if (Input.GetButtonDown("Fire1"))
+                {
+                    if (m_Gun != null)
+                    {
+                        m_Gun.Fire();
+                    }
+                    else
+                    {
+                        Debug.LogError("检查是否添加了枪械");
+                    }
                 }
             }
 

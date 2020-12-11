@@ -7,6 +7,7 @@ namespace Mechanics
     /// <summary>
     /// 模拟实体的运动学，可物理运动对象的基类
     /// </summary>
+    [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public class KinematicObject : MonoBehaviour
     {
         [Header("地面法线最小对比值，决定了是否位于地表的判断")]
