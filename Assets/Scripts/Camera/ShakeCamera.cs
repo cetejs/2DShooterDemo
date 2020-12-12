@@ -21,6 +21,12 @@ namespace Camera
         /// <param name="duration">震动持续时间</param>
         public void Shake(float strength, float duration)
         {
+            //优先使用强度的震动
+            if (m_ShakeStrength > strength && m_IsShaked)
+            {
+                return;
+            }
+
             m_ShakeStrength = strength;
             m_ShakeDuration = duration;
             m_IsShaked = true;
@@ -31,7 +37,7 @@ namespace Camera
         /// </summary>
         public void FireShake()
         {
-            Shake(2, 0.2f);
+            Shake(5, 0.2f);
         }
 
         /// <summary>
@@ -39,7 +45,7 @@ namespace Camera
         /// </summary>
         public void ExplosionShake()
         {
-            Shake(3, 0.3f);
+            Shake(10, 0.3f);
         }
 
         private void Update()

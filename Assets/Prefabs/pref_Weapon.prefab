@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefName: pref_Bullet
   muzzle: {fileID: 1464823813}
-  randomAngleRange: 3
+  randomAngleRange: 5
 --- !u!1 &4245002388302789392
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefName: pref_Bullet
   muzzle: {fileID: 1464823813}
-  randomAngleRange: 3
+  randomAngleRange: 5
 --- !u!1 &4912481735326899218
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefName: pref_Bullet
   muzzle: {fileID: 1464823813}
-  randomAngleRange: 3
+  randomAngleRange: 5
 --- !u!1 &6071572910640086448
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefName: pref_Bullet
   muzzle: {fileID: 1464823813}
-  randomAngleRange: 3
+  randomAngleRange: 5
 --- !u!1 &7142138229689096522
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefName: pref_Bullet
   muzzle: {fileID: 1464823813}
-  randomAngleRange: 3
+  randomAngleRange: 5
 --- !u!1 &7885918754769400206
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,8 +363,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashFXDisplay: {fileID: 3381479835882572262}
-  shootRate: 5
-  recoilForce: 1
+  shootRate: 10
+  recoilForce: 3
   fakeGun: {fileID: 0}
 --- !u!95 &8553154303525084155
 Animator:

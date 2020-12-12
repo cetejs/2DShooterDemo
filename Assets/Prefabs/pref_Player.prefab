@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 8826694068921100592}
   - component: {fileID: 4847659040641811856}
   - component: {fileID: 8504956985895588737}
+  - component: {fileID: 627596346}
   m_Layer: 9
   m_Name: pref_Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -168,12 +169,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minGroundNormalY: 0.65
   minWallDistance: 0.05
+  minGroundDistance: 1
   gravityModifier: 1.8
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 256
   m_Velocity: {x: 0, y: 0}
   maxSpeed: 4
   jumpTakeOffSpeed: 7
   jumpDeceleration: 0.5
   controlEnabled: 1
+--- !u!114 &627596346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983010633608720225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18bc71dd78d646e2aaa09783781cb95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  health: 1
+  explosionPrefName: pref_Explosion
 --- !u!1 &5961096916898583710
 GameObject:
   m_ObjectHideFlags: 0

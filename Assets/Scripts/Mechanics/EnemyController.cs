@@ -1,32 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Weapon;
+﻿using UnityEngine;
 
 namespace Mechanics
 {
     /// <summary>
-    /// 主角控制器
+    /// 敌人控制器
     /// </summary>
-    [RequireComponent(typeof(Animator))]
-    public class PlayerController : KinematicObject, ICharacterController
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class EnemyController : KinematicObject, ICharacterController
     {
         [Header("最大移动速度")]
         public float maxSpeed = 4;
-        [Header("持续按下跳跃键向上的速度")]
-        public float jumpTakeOffSpeed = 7;
-        [Header("停止按下跳跃键后的减速度")]
-        public float jumpDeceleration = 0.5f;
-        [Header("角色控制器开关")]
+        [Header("持续跳跃向上的速度")]
+        public float jumpSpeed = 7;
+        [Header("转向速度")]
+        public float turnSpeed = 10;
+        [Header("敌人控制器开关")]
         public bool controlEnabled = true;
+        [Header("敌人跳跃开关")]
+        public bool jumpEnabled = false;
 
         private Animator m_Animator;
-        private IGun m_Gun;
-        private bool m_IsJumped;
-        private bool m_IsStopJump;
-        private Vector2 m_Move;
 
+        private bool m_IsJumped;
+        private Vector2 m_Move;
         private JumpState m_JumpState = JumpState.Grounded;
+
+        private SpriteRenderer m_SpriteRenderer;
 
         /// <summary>
         /// 控制器是否是激活状态
@@ -63,12 +62,13 @@ namespace Mechanics
             controlEnabled = false;
             m_Collider2d.enabled = false;
             enabled = false;
+            m_SpriteRenderer.sortingOrder = -1;
         }
 
         protected override void Awake()
         {
             m_Animator = GetComponent<Animator>();
-            m_Gun = GetComponentInChildren<IGun>();
+            m_SpriteRenderer = GetComponent<SpriteRenderer>();
 
             base.Awake();
         }
@@ -77,27 +77,16 @@ namespace Mechanics
         {
             if (controlEnabled)
             {
-                m_Move.x = Input.GetAxis("Horizontal");
+                SimulateControlMove();
 
-                if (m_JumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
+                if (jumpEnabled)
                 {
-                    m_JumpState = JumpState.PrepareToJump;
+                    SimulateControlJump();
                 }
-                else if (Input.GetButtonUp("Jump"))
-                {
-                    m_IsStopJump = true;
-                }
-                else if (Input.GetButton("Fire1"))
-                {
-                    if (m_Gun != null)
-                    {
-                        m_Gun.Fire();
-                    }
-                    else
-                    {
-                        Debug.LogError("检查是否添加了枪械");
-                    }
-                }
+            }
+            else if(m_Move.x != 0)
+            {
+                m_Move.x = 0;
             }
 
             UpdateJumpState();
@@ -111,36 +100,42 @@ namespace Mechanics
         {
             if (m_IsJumped && IsGrounded)
             {
-                m_Velocity.y = jumpTakeOffSpeed;
+                m_Velocity.y = jumpSpeed;
                 m_IsJumped = false;
             }
-            else if (m_IsStopJump)
-            {
-                m_IsStopJump = false;
 
-                if (m_Velocity.y > 0)
-                {
-                    m_Velocity.y *= jumpDeceleration;
-                }
-            }
-
-            //很多地方依赖于Scale控制角色的翻转，不可随意修改
-            Vector3 scale = transform.localScale;
-
-            if (m_Move.x > 0.01f)
-            {
-                scale.x = 1;
-            }
-            else if (m_Move.x < -0.01f)
-            {
-                scale.x = -1;
-            }
-
-            transform.localScale = scale;
             m_Animator.SetBool("IsGrounded", IsGrounded);
             m_Animator.SetFloat("VelocityX", Mathf.Abs(m_Velocity.x) / maxSpeed);
             m_Animator.SetFloat("VelocityY", m_Velocity.y);
             m_TargetVelocity = m_Move * maxSpeed;
+        }
+
+        /// <summary>
+        /// 模拟Horizontal控制移动
+        /// </summary>
+        private void SimulateControlMove()
+        {
+            if (IsForwardWalled)
+            {
+                Vector3 scale = transform.localScale;
+                scale.x = -scale.x;
+                transform.localScale = scale;
+            }
+
+            m_Move.x = Mathf.Lerp(m_Move.x, 1 * transform.localScale.x, turnSpeed * Time.deltaTime);
+        }
+
+        /// <summary>
+        /// 模拟Jump控制跳跃
+        /// 当前方没有路时，模拟跳跃
+        /// </summary>
+        private void SimulateControlJump()
+        {
+
+            if (m_JumpState == JumpState.Grounded && !IsForwardGrounded)
+            {
+                m_JumpState = JumpState.PrepareToJump;
+            }
         }
 
         private void UpdateJumpState()
@@ -152,7 +147,6 @@ namespace Mechanics
                 case JumpState.PrepareToJump:
                     {
                         m_IsJumped = true;
-                        m_IsStopJump = false;
                         m_JumpState = JumpState.Jumping;
                     }
                     break;

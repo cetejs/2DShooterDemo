@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Mechanics;
 using Common;
 using FX;
@@ -54,16 +52,9 @@ namespace Weapon
             }
 
             //后坐力实现
-            if (m_User.IsGrounded && !m_User.IsBackWalled)
+            if (m_User.IsGrounded && !m_User.IsBackObstacled)
             {
-                if (transform.lossyScale.x > 0)
-                {
-                    m_User.transform.position += Vector3.left * recoilForce * Time.deltaTime;
-                }
-                else
-                {
-                    m_User.transform.position += Vector3.right * recoilForce * Time.deltaTime;
-                }
+                m_User.transform.position += Vector3.left * recoilForce * transform.lossyScale.x * Time.deltaTime;
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Common;
 using UnityEngine;
 
 namespace Mechanics
@@ -12,11 +11,14 @@ namespace Mechanics
     {
         [Header("地面法线最小对比值，决定了是否位于地表的判断")]
         public float minGroundNormalY = 0.65f;
-        [Header("与墙面距离的最小值，决定了是否背向墙面")]
+        [Header("与墙面距离的最小值，决定了前方是否有墙或者后方是否有障碍物")]
         public float minWallDistance = 0.01f;
-
+        [Header("与地面距离的最小值，决定了前方是否有路")]
+        public float minGroundDistance = 0.02f;
         [Header("重力系数")]
         public float gravityModifier = 1f;
+        [Header("碰撞层")]
+        public LayerMask collisionMask = Physics2D.AllLayers;
 
         /// <summary>
         /// 是否位于地面
@@ -24,9 +26,43 @@ namespace Mechanics
         public bool IsGrounded { get; private set; }
 
         /// <summary>
-        /// 是否触碰墙面
+        /// 探测前方是否有路
         /// </summary>
-        public bool IsBackWalled
+        public bool IsForwardGrounded
+        {
+            get
+            {
+                Vector2 point = Bounds.center;
+                float distance = Bounds.size.y / 2 + minGroundDistance;
+
+                point.x += Bounds.size.x / 2 * transform.lossyScale.x;
+
+                return Physics2D.Raycast(point, Vector2.down, distance, 1 << DataMgr.Instance.GroundLayer);
+            }
+        }
+
+        /// <summary>
+        /// 探测前方是否是墙面
+        /// </summary>
+        public bool IsForwardWalled
+        {
+            get
+            {
+                Vector2 point = Bounds.center;
+                Vector2 size = Bounds.size;
+
+                point.x += (Bounds.size.x + minWallDistance) / 2 * transform.lossyScale.x;
+                point.y += 0.01f;
+                size.x = minWallDistance;
+
+                return Physics2D.OverlapBox(point, size, 0, 1 << DataMgr.Instance.GroundLayer);
+            }
+        }
+
+        /// <summary>
+        /// 探测后方是否有障碍物
+        /// </summary>
+        public bool IsBackObstacled
         {
             get
             {
@@ -34,7 +70,7 @@ namespace Mechanics
                 Vector2 size = Bounds.size;
 
                 point.x -= (Bounds.size.x + minWallDistance) / 2 * transform.lossyScale.x;
-                point.y += minWallDistance;
+                point.y += 0.01f;
                 size.x = minWallDistance;
 
                 return Physics2D.OverlapBox(point, size, 0, Physics2D.GetLayerCollisionMask(gameObject.layer));
@@ -61,8 +97,8 @@ namespace Mechanics
         [SerializeField]
         protected Vector2 m_Velocity;
 
-        private Rigidbody2D m_Rigidbody2D;
-        private Collider2D m_Collider2d;
+        protected Rigidbody2D m_Rigidbody2D;
+        protected Collider2D m_Collider2d;
         private ContactFilter2D m_ContactFilter2D;
         private RaycastHit2D[] m_HitBuffer = new RaycastHit2D[16];
 
@@ -92,7 +128,7 @@ namespace Mechanics
             m_Rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
             m_ContactFilter2D.useTriggers = false;
             m_ContactFilter2D.useLayerMask = true;
-            m_ContactFilter2D.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
+            m_ContactFilter2D.SetLayerMask(collisionMask);
         }
 
         protected virtual void Update()

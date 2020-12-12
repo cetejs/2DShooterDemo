@@ -155,3 +155,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   launchSpeed: 15
   hitPrefName: pref_Hit
+  damage: 1
+  beatBackPower: 1

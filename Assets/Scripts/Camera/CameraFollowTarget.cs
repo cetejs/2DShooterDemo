@@ -9,10 +9,8 @@ namespace Camera
     {
         [Header("跟随的目标")]
         public Transform target;
-
         [Header("与跟随目标的偏移向量")]
         public Vector3 offest;
-
         [Header("跟随速度系数")]
         public float followModifier = 5f;
 
