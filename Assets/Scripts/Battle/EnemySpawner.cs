@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Mechanics;
+﻿using UnityEngine;
 using Common;
 
 namespace Battle
 {
     /// <summary>
     /// 敌人孵化器
+    /// 没有对敌人人数做限制，会一直孵化敌人
     /// </summary>
     public class EnemySpawner : MonoBehaviour
     {

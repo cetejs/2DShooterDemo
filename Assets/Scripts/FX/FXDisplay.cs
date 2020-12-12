@@ -24,9 +24,12 @@ namespace FX
         public void ShowFX()
         {
             m_Animator.SetTrigger(fxTriggerParame);
+            OnShowFx();
         }
 
-        private void Awake()
+        protected virtual void OnShowFx() { }
+
+        protected virtual void Awake()
         {
             m_Animator = GetComponent<Animator>();
             m_WaitForSecondsToRecovery = new WaitForSeconds(duration);

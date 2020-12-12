@@ -10,7 +10,7 @@ namespace Weapon
     /// 可拥有多把枪械
     /// 由于动画原因暂且使用两把枪交替显示射击动画，闲置动画（被使用者接管）
     /// </summary>
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Animator), typeof(AudioSource))]
     public class GunController : MonoBehaviour, IGun
     {
         [Header("枪口闪光特效")]
@@ -28,6 +28,7 @@ namespace Weapon
         private Gun[] m_Guns;
         private KinematicObject m_User;
         private Animator m_Animator;
+        private AudioSource m_AudioSource;
 
         /// <summary>
         /// 开火
@@ -41,6 +42,12 @@ namespace Weapon
                 return;
             }
 
+            if (m_AudioSource.isPlaying)
+            {
+                m_AudioSource.Stop();
+            }
+
+            m_AudioSource.Play();
             m_Animator.SetTrigger(m_User.IsGrounded ? "Fire" : "JumpFire");
             m_Timer = 1 / shootRate;
             flashFXDisplay.ShowFX();
@@ -63,6 +70,7 @@ namespace Weapon
             m_Guns = GetComponentsInChildren<Gun>();
             m_User = GetComponentInParent<KinematicObject>();
             m_Animator = GetComponent<Animator>();
+            m_AudioSource = GetComponent<AudioSource>();
         }
 
         private void Start()
