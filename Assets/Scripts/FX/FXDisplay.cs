@@ -1,19 +1,18 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
 namespace FX
 {
     /// <summary>
-    /// 特效显示器
+    /// 特效显示器，可回收
     /// </summary>
     [RequireComponent(typeof(Animator))]
     public class FXDisplay : MonoBehaviour
     {
         [Header("设置决定特效触发的参数")]
         public string fxTriggerParame;
-        [Header("持续多长时间就会被回收")]
+        [Header("持续多长时间就会被回收，当为零时表示不可回收")]
         public float duration = 1;
 
         private Animator m_Animator;

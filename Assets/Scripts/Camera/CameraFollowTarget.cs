@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Camera
 {
@@ -18,17 +16,6 @@ namespace Camera
         [Header("跟随速度系数")]
         public float followModifier = 5f;
 
-        /// <summary>
-        /// 跟随目标是否面向右边
-        /// </summary>
-        public bool IsTargetFaceToRight
-        {
-            get 
-            {
-                return target.localScale.x > 0;
-            }
-        }
-
         private Vector3 m_RealOffset;
 
         private void Start()
@@ -38,13 +25,11 @@ namespace Camera
 
         private void LateUpdate()
         {
-            int sign = IsTargetFaceToRight ? 1 : -1;
             m_RealOffset = offest;
-            m_RealOffset.x *= sign;
+            m_RealOffset.x *= target.localScale.x;
             Vector3 targetPosition = target.position + m_RealOffset;
             targetPosition.z = transform.position.z;
             transform.position = Vector3.Lerp(transform.position, targetPosition, followModifier * Time.deltaTime);
         }
-
     }
 }

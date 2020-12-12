@@ -23,7 +23,6 @@ namespace Weapon
         /// </summary>
         public void Fire()
         {
-            
             Bullet bullet = ObjPoolMgr.Instance.SpawnObj<Bullet>(bulletPrefName);
             float angle = Random.Range(-randomAngleRange, randomAngleRange);
             Vector3 eulerAngles = new Vector3(0, transform.lossyScale.x > 0 ? 0 : 180, angle) + transform.localEulerAngles;

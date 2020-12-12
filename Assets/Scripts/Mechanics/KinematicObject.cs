@@ -12,6 +12,8 @@ namespace Mechanics
     {
         [Header("地面法线最小对比值，决定了是否位于地表的判断")]
         public float minGroundNormalY = 0.65f;
+        [Header("与墙面距离的最小值，决定了是否背向墙面")]
+        public float minWallDistance = 0.01f;
 
         [Header("重力系数")]
         public float gravityModifier = 1f;
@@ -20,6 +22,32 @@ namespace Mechanics
         /// 是否位于地面
         /// </summary>
         public bool IsGrounded { get; private set; }
+
+        /// <summary>
+        /// 是否触碰墙面
+        /// </summary>
+        public bool IsBackWalled
+        {
+            get
+            {
+                Vector2 point = Bounds.center;
+                Vector2 size = Bounds.size;
+
+                point.x -= (Bounds.size.x + minWallDistance) / 2 * transform.lossyScale.x;
+                point.y += minWallDistance;
+                size.x = minWallDistance;
+
+                return Physics2D.OverlapBox(point, size, 0, Physics2D.GetLayerCollisionMask(gameObject.layer));
+            }
+        }
+
+        /// <summary>
+        /// 碰撞器的边界
+        /// </summary>
+        public Bounds Bounds
+        {
+            get { return m_Collider2d.bounds; }
+        }
 
         /// <summary>
         /// 只有水平速度有意义
@@ -34,6 +62,7 @@ namespace Mechanics
         protected Vector2 m_Velocity;
 
         private Rigidbody2D m_Rigidbody2D;
+        private Collider2D m_Collider2d;
         private ContactFilter2D m_ContactFilter2D;
         private RaycastHit2D[] m_HitBuffer = new RaycastHit2D[16];
 
@@ -54,6 +83,7 @@ namespace Mechanics
         protected virtual void Awake()
         {
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
+            m_Collider2d = GetComponent<Collider2D>();
         }
 
         protected virtual void Start()

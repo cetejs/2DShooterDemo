@@ -8,7 +8,7 @@ namespace Mechanics
     /// <summary>
     /// 主角控制器
     /// </summary>
-    [RequireComponent(typeof(Animator), typeof(Collider2D))]
+    [RequireComponent(typeof(Animator))]
     public class PlayerController : KinematicObject
     {
         [Header("最大移动速度")]
@@ -20,16 +20,7 @@ namespace Mechanics
         [Header("角色控制器开关")]
         public bool controlEnabled = true;
 
-        /// <summary>
-        /// 碰撞器的边界
-        /// </summary>
-        public Bounds Bounds
-        {
-            get { return m_Collider2d.bounds; }
-        }
-
         private Animator m_Animator;
-        private Collider2D m_Collider2d;
         private IGun m_Gun;
 
         private bool m_IsJumped;
@@ -42,7 +33,6 @@ namespace Mechanics
         protected override void Awake()
         {
             m_Animator = GetComponent<Animator>();
-            m_Collider2d = GetComponent<Collider2D>();
             m_Gun = GetComponentInChildren<IGun>();
 
             base.Awake();
@@ -98,6 +88,7 @@ namespace Mechanics
                 }
             }
 
+            //很多地方依赖于Scale控制角色的翻转，不可随意修改
             Vector3 scale = transform.localScale;
 
             if (m_Move.x > 0.01f)

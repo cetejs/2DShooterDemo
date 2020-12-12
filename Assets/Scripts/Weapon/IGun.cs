@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Weapon
+﻿namespace Weapon
 {
     /// <summary>
     /// 枪的接口定义
