@@ -36,6 +36,26 @@ namespace Mechanics
         {
             bool isHitFXShowed = false;
 
+            //敌人受伤并会被击退
+            if (collision.transform.CompareTag(DataMgr.Instance.EnemyTag))
+            {
+                KinematicObject kObj = collision.transform.GetComponent<KinematicObject>();
+                Damageable damageable = kObj.GetComponent<Damageable>();
+                int deathDir = (int)Mathf.Sign(kObj.transform.position.x - transform.position.x);
+
+                if (!damageable.GetDamage(damage, deathDir))
+                {
+                    return;
+                }
+
+                int sign = transform.right.x > 0 ? 1 : -1;
+
+                if (!kObj.IsForwardWalled && !kObj.IsBackObstacled)
+                {
+                    kObj.transform.position += Vector3.right * beatBackPower * sign * Time.deltaTime;
+                }
+            }
+
             //显示击中特效
             foreach (ContactPoint2D point2D in collision.contacts)
             {
@@ -48,19 +68,6 @@ namespace Mechanics
                 hitFXDisplay.transform.position = new Vector3(point2D.point.x, point2D.point.y, 0);
                 hitFXDisplay.ShowFX();
                 isHitFXShowed = true;
-            }
-
-            //敌人受伤并会被击退
-            if (collision.transform.CompareTag(DataMgr.Instance.EnemyTag))
-            {
-                KinematicObject kObj = collision.transform.GetComponent<KinematicObject>();
-                kObj.GetComponent<IDamageable>().GetDamage(damage);
-                int sign = transform.right.x > 0 ? 1 : -1;
-
-                if (!kObj.IsForwardWalled && !kObj.IsBackObstacled)
-                {
-                    kObj.transform.position += Vector3.right * beatBackPower * sign * Time.deltaTime;
-                }
             }
 
             ObjPoolMgr.Instance.RecycleObj(gameObject);

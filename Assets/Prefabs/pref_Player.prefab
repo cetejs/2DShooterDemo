@@ -118,7 +118,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 983010633608720225}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 1
   m_Mass: 0.13068584
   m_LinearDrag: 0
@@ -179,6 +179,8 @@ MonoBehaviour:
   jumpTakeOffSpeed: 7
   jumpDeceleration: 0.5
   controlEnabled: 1
+  trampleDamage: 1
+  trampleSpeed: 5
 --- !u!114 &627596346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   health: 1
+  attackPower: 1
   explosionPrefName: pref_Explosion
 --- !u!1 &5961096916898583710
 GameObject:

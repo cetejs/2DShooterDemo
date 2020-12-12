@@ -116,7 +116,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 5312762867590004636}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 1
   m_Mass: 0.13068584
   m_LinearDrag: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   m_Velocity: {x: 0, y: 0}
-  maxSpeed: 4
+  maxSpeed: 2
   jumpSpeed: 7
   turnSpeed: 10
   controlEnabled: 1
@@ -190,5 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c18bc71dd78d646e2aaa09783781cb95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 10
   health: 1
+  attackPower: 1
+  explosionPrefName: pref_Explosion

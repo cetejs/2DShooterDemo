@@ -2,6 +2,9 @@
 
 namespace FX
 {
+    /// <summary>
+    /// 附加音效的特效展示器
+    /// </summary>
     [RequireComponent(typeof(AudioSource))]
     public class AudioFXDisplay : FXDisplay
     {

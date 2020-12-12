@@ -106,6 +106,15 @@ namespace Mechanics
         private const float MinMoveDistance = 0.001f;
 
         /// <summary>
+        /// 反射一个向上的速度
+        /// </summary>
+        /// <param name="value"></param>
+        public void Bounce(float value)
+        {
+            m_Velocity.y = value;
+        }
+
+        /// <summary>
         /// 传送到指定地点
         /// </summary>
         /// <param name="position"></param>

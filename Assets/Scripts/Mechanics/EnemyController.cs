@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using Battle;
+using Common;
+using UnityEngine;
 
 namespace Mechanics
 {
     /// <summary>
     /// 敌人控制器
     /// </summary>
-    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(SpriteRenderer), typeof(Damageable))]
     public class EnemyController : KinematicObject, ICharacterController
     {
         [Header("最大移动速度")]
@@ -19,21 +21,27 @@ namespace Mechanics
         [Header("敌人跳跃开关")]
         public bool jumpEnabled = false;
 
-        private Animator m_Animator;
-
+        private int m_SortingOrder;
+        private bool m_IsAlive = true;
         private bool m_IsJumped;
         private Vector2 m_Move;
         private JumpState m_JumpState = JumpState.Grounded;
 
+        private Animator m_Animator;
+        private Damageable m_Damageable;
         private SpriteRenderer m_SpriteRenderer;
 
+        private readonly int DeathSpeedX = 1;
+        private readonly int DeathSpeedY = 5;
+        private readonly int RealDeathSec = 3;
+
         /// <summary>
-        /// 控制器是否是激活状态
+        /// 控制器是否活着
         /// </summary>
         /// <returns></returns>
-        public bool IsControlEnabled()
+        public bool IsAlive()
         {
-            return controlEnabled;
+            return m_IsAlive;
         }
 
         /// <summary>
@@ -50,25 +58,63 @@ namespace Mechanics
         /// </summary>
         public void OnHitted()
         {
-            controlEnabled = true;
+            if (m_IsAlive)
+            {
+                controlEnabled = true;
+            }
         }
 
         /// <summary>
         /// 角色死亡
         /// </summary>
-        public void Die()
+        public void Die(int deathDir)
         {
-            m_Animator.SetTrigger("Death");
-            controlEnabled = false;
-            m_Collider2d.enabled = false;
-            enabled = false;
+            m_Move.x = deathDir * DeathSpeedX;
+            Bounce(DeathSpeedY);
+            m_Animator.SetBool("IsDeath", true);
+            controlEnabled = m_IsAlive = false;
             m_SpriteRenderer.sortingOrder = -1;
+            m_Collider2d.isTrigger = true;
+
+            //容错处理卡住往上升的情况
+            CancelInvoke();
+            Invoke("RealDeath", RealDeathSec);
+        }
+
+        /// <summary>
+        /// 敌人复活，注意复活后会被直接回收
+        /// </summary>
+        /// <param name="point">复活点</param>
+        public void Revive(Transform point)
+        {
+            if (!m_IsAlive && IsGrounded)
+            {
+                Teleport(point.position);
+                transform.rotation = point.rotation;
+                transform.localScale = point.localScale;
+
+                m_Damageable.Revive();
+                m_Rigidbody2D.WakeUp();
+                m_SpriteRenderer.sortingOrder = m_SortingOrder;
+                m_Animator.SetBool("IsDeath", false);
+                m_Collider2d.isTrigger = false;
+                m_Collider2d.enabled = true;
+                controlEnabled = true;
+                m_IsAlive = true;
+                enabled = true;
+
+                ObjPoolMgr.Instance.RecycleObj(gameObject);
+            }
         }
 
         protected override void Awake()
         {
             m_Animator = GetComponent<Animator>();
+            m_Damageable = GetComponent<Damageable>();
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
+            m_SortingOrder = m_SpriteRenderer.sortingOrder;
+
+            GameMgr.Instance.OnNeedRecycleAllEnemies += Revive;
 
             base.Awake();
         }
@@ -84,13 +130,36 @@ namespace Mechanics
                     SimulateControlJump();
                 }
             }
-            else if(m_Move.x != 0)
+            else if (m_Move.x != 0)
             {
-                m_Move.x = 0;
+                m_Move.x = Mathf.Lerp(m_Move.x, 0, Time.deltaTime);
             }
 
             UpdateJumpState();
             base.Update();
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            //死亡后落地处理真正的死亡
+            if (!m_IsAlive && IsGrounded)
+            {
+                RealDeath();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            GameMgr.Instance.OnNeedRecycleAllEnemies -= Revive;
+        }
+
+        private void RealDeath()
+        {
+            CancelInvoke();
+            m_Move *= 0;
+            m_Rigidbody2D.Sleep();
+            m_Collider2d.enabled = false;
+            enabled = false;
         }
 
         /// <summary>
@@ -131,7 +200,6 @@ namespace Mechanics
         /// </summary>
         private void SimulateControlJump()
         {
-
             if (m_JumpState == JumpState.Grounded && !IsForwardGrounded)
             {
                 m_JumpState = JumpState.PrepareToJump;

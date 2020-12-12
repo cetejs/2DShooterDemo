@@ -23,6 +23,8 @@ namespace Common
 
         #endregion
 
+        public readonly float GameOverTimeScale = 0.2f;
+
         protected override void Awake()
         {
             GroundLayer = LayerMask.NameToLayer("Ground");
