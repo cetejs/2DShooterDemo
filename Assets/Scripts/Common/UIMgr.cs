@@ -6,8 +6,14 @@ namespace Common
 {
     public class UIMgr : MonoSingleton<UIMgr>
     {
+        #region 属性字段
+
         [Header("转场UI动画")]
         public UIAnimation transitionAnimation;
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 转换到战斗界面
@@ -28,5 +34,7 @@ namespace Common
             transitionAnimation.SetPlayAnimationFinish(onFinish);
             transitionAnimation.PlayBackward();
         }
+
+        #endregion
     }
 }

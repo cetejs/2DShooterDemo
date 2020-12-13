@@ -5,10 +5,16 @@ namespace Common
 {
     public class ObjRecycler : MonoBehaviour
     {
+        #region 属性字段
+
         [Header("持续多长时间就会被回收，当为零时表示不可回收")]
         public float duration = 1;
 
         private WaitForSeconds m_WaitForSecondsToRecovery;
+
+        #endregion
+
+        #region 外部接口
 
         public void RecycleObj(string prefName = null)
         {
@@ -17,6 +23,10 @@ namespace Common
                 ObjPoolMgr.Instance.RecycleObj(gameObject);
             }
         }
+
+        #endregion
+
+        #region 内部实现
 
         protected virtual void Awake()
         {
@@ -46,5 +56,7 @@ namespace Common
             yield return m_WaitForSecondsToRecovery;
             ObjPoolMgr.Instance.RecycleObj(gameObject);
         }
+
+        #endregion
     }
 }

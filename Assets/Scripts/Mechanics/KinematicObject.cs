@@ -9,6 +9,8 @@ namespace Mechanics
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public class KinematicObject : MonoBehaviour
     {
+        #region 属性字段
+
         [Header("地面法线最小对比值，决定了是否位于地表的判断")]
         public float minGroundNormalY = 0.65f;
         [Header("与墙面距离的最小值，决定了前方是否有墙或者后方是否有障碍物")]
@@ -105,6 +107,10 @@ namespace Mechanics
         private const float ShellRadius = 0.01f;
         private const float MinMoveDistance = 0.001f;
 
+        #endregion
+
+        #region 外部接口
+
         /// <summary>
         /// 反射一个向上的速度
         /// </summary>
@@ -124,6 +130,10 @@ namespace Mechanics
             m_Rigidbody2D.velocity *= 0;
             m_Velocity *= 0;
         }
+
+        #endregion
+
+        #region 内部实现
 
         protected virtual void Awake()
         {
@@ -224,5 +234,7 @@ namespace Mechanics
 
             m_Rigidbody2D.position += move.normalized * distance;
         }
+
+        #endregion
     }
 }

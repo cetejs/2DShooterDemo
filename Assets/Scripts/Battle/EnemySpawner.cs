@@ -10,6 +10,8 @@ namespace Battle
     /// </summary>
     public class EnemySpawner : MonoBehaviour
     {
+        #region 属性字段
+
         [Header("敌人的预制名称")]
         public string enemyPrefName = "pref_Enemy";
         [Header("孵化频率")]
@@ -18,6 +20,10 @@ namespace Battle
         public Transform temp;
 
         private bool m_IsStoped = true;
+
+        #endregion
+
+        #region 外部接口
 
         public void StartSpawn()
         {
@@ -34,10 +40,9 @@ namespace Battle
             CancelInvoke("SpawnEnemy");
         }
 
-        //private void Start()
-        //{
-        //    StartSpawn();
-        //}
+        #endregion
+
+        #region 内部实现
 
         private void Awake()
         {
@@ -66,5 +71,7 @@ namespace Battle
             GameObject enemy = ObjPoolMgr.Instance.SpawnObj(enemyPrefName);
             enemy.transform.SetTransform(temp);
         }
+
+        #endregion
     }
 }

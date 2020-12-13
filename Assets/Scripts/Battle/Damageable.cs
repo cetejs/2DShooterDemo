@@ -11,6 +11,8 @@ namespace Battle
     [RequireComponent(typeof(ICharacterController))]
     public class Damageable : MonoBehaviour
     {
+        #region 属性字段
+
         [Header("最大生命值")]
         public int maxHealth = 1;
         [Header("当前生命值")]
@@ -21,6 +23,10 @@ namespace Battle
         public string explosionPrefName = "pref_Explosion";
 
         private ICharacterController m_CharacterController;
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 获得损害
@@ -77,6 +83,10 @@ namespace Battle
             health = maxHealth;
         }
 
+        #endregion
+
+        #region 内部实现
+
         private void Awake()
         {
             m_CharacterController = GetComponent<ICharacterController>();
@@ -93,5 +103,7 @@ namespace Battle
         {
             health = Mathf.Max(health - value, 0);
         }
+
+        #endregion
     }
 }

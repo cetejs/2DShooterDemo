@@ -10,9 +10,11 @@ namespace Weapon
     /// 可拥有多把枪械
     /// 由于动画原因暂且使用两把枪交替显示射击动画，闲置动画（被使用者接管）
     /// </summary>
-    [RequireComponent(typeof(Animator), typeof(AudioSource))]
+    [RequireComponent(typeof(Animator), typeof(SpriteRenderer), typeof(AudioSource))]
     public class GunController : MonoBehaviour, IGun
     {
+        #region 属性字段
+
         [Header("枪口闪光特效")]
         public FXDisplay flashFXDisplay;
         [Header("射击频率")]
@@ -20,21 +22,26 @@ namespace Weapon
         [Header("后坐力")]
         public float recoilForce = 1f;
         [Header("假枪，用于显示空枪动画")]
-        public GameObject fakeGun;
+        public SpriteRenderer fakeGun;
         [Header("弹壳预制名称")]
         public string shellPrefName = "pref_BulletShell";
         [Header("弹壳出口")]
         public Transform shellExit;
 
         private float m_Timer;
+        private Vector2 m_ShellPower;
 
         private Gun[] m_Guns;
         private KinematicObject m_User;
         private Animator m_Animator;
+        private SpriteRenderer m_SpriteRenderer;
         private AudioSource m_AudioSource;
-        private Vector2 m_ShellPower;
 
         private readonly Vector2 ShellPower = new Vector2(-10, 8);
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 开火
@@ -75,11 +82,16 @@ namespace Weapon
             }
         }
 
+        #endregion
+
+        #region 内部实现
+
         private void Awake()
         {
             m_Guns = GetComponentsInChildren<Gun>();
             m_User = GetComponentInParent<KinematicObject>();
             m_Animator = GetComponent<Animator>();
+            m_SpriteRenderer = GetComponent<SpriteRenderer>();
             m_AudioSource = GetComponent<AudioSource>();
 
             m_ShellPower.y = ShellPower.y;
@@ -87,7 +99,7 @@ namespace Weapon
 
         private void Start()
         {
-            gameObject.SetActive(false);
+            ShowFireGun(false);
         }
 
         private void Update()
@@ -112,8 +124,10 @@ namespace Weapon
         /// <param name="isShow"></param>
         private void ShowFireGun(bool isShow)
         {
-            fakeGun.SetSafeActive(!isShow);
-            gameObject.SetSafeActive(isShow);
+            fakeGun.enabled = !isShow;
+            m_SpriteRenderer.enabled = isShow;
         }
+
+        #endregion
     }
 }

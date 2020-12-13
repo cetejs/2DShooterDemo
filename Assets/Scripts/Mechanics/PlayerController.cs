@@ -13,6 +13,8 @@ namespace Mechanics
     [RequireComponent(typeof(Animator), typeof(Damageable))]
     public class PlayerController : KinematicObject, ICharacterController
     {
+        #region 属性字段
+
         [Header("最大移动速度")]
         public float maxSpeed = 4;
         [Header("持续按下跳跃键向上的速度")]
@@ -28,6 +30,7 @@ namespace Mechanics
       
         private bool m_IsJumped;
         private bool m_IsStopJump;
+        private bool m_IsAlive = true;
         private Vector2 m_Move;
         private JumpState m_JumpState = JumpState.Grounded;
 
@@ -38,13 +41,17 @@ namespace Mechanics
         private readonly int DeathSpeedX = 1;
         private readonly int DeathSpeedY = 5;
 
+        #endregion
+
+        #region 外部接口
+
         /// <summary>
         /// 控制器是否是激活状态
         /// </summary>
         /// <returns></returns>
         public bool IsAlive()
         {
-            return controlEnabled;
+            return m_IsAlive;
         }
 
         /// <summary>
@@ -57,15 +64,6 @@ namespace Mechanics
         }
 
         /// <summary>
-        /// 玩家受击后恢复行动，事件已经移除
-        /// </summary>
-        public void OnHitted()
-        {
-            Debug.LogError("你不应该在玩家受伤动画下加入事件");
-            //controlEnabled = true;
-        }
-
-        /// <summary>
         /// 玩家死亡
         /// </summary>
         public void Die(int deathDir)
@@ -73,6 +71,7 @@ namespace Mechanics
             m_Move.x = deathDir * DeathSpeedX;
             Bounce(DeathSpeedY);
             m_Animator.SetBool("IsDeath", true);
+            m_IsAlive = false;
             controlEnabled = false;
             Time.timeScale = DataMgr.Instance.GameOverTimeScale;
             //m_Collider2d.enabled = false;
@@ -84,7 +83,7 @@ namespace Mechanics
         /// <param name="point"></param>
         public void Revive(Transform point)
         {
-            if (!controlEnabled && IsGrounded)
+            if (!m_IsAlive && IsGrounded)
             {
                 Teleport(point.position);
                 transform.rotation = point.rotation;
@@ -92,9 +91,14 @@ namespace Mechanics
 
                 m_Damageable.Revive();
                 m_Animator.SetBool("IsDeath", false);
+                m_IsAlive = true;
                 controlEnabled = true;
             }
         }
+
+        #endregion
+
+        #region 内部实现
 
         protected override void Awake()
         {
@@ -114,8 +118,11 @@ namespace Mechanics
 
         private void OnGamePause(bool paused)
         {
-            controlEnabled = !paused;
-            m_Move *= 0;
+            if (m_IsAlive)
+            {
+                controlEnabled = !paused;
+                m_Move *= 0;
+            }
         }
 
         protected override void Update()
@@ -172,7 +179,7 @@ namespace Mechanics
                     m_Damageable.GetDamage(enemyDamageable);
                 }
             }
-            else if (!controlEnabled && IsGrounded)
+            else if (!m_IsAlive && IsGrounded)
             {
                 m_Move *= 0;
                 Time.timeScale = 1;
@@ -265,5 +272,7 @@ namespace Mechanics
             InFlight,
             Landed
         }
+
+        #endregion
     }
 }

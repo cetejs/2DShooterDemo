@@ -8,10 +8,16 @@ namespace Common
     /// </summary>
     public class ObjPool
     {
+        #region 属性字段
+
         private readonly GameObject m_Prefab;
         private readonly Queue<GameObject> m_ObjQueue = new Queue<GameObject>();
         private readonly string m_PrefName;
         private int m_Count;
+
+        #endregion
+
+        #region 外部接口
 
         public ObjPool(GameObject prefab)
         {
@@ -50,5 +56,7 @@ namespace Common
             m_ObjQueue.Enqueue(obj);
             obj.SetActive(false);
         }
+
+        #endregion
     }
 }

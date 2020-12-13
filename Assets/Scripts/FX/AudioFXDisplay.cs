@@ -8,7 +8,13 @@ namespace FX
     [RequireComponent(typeof(AudioSource))]
     public class AudioFXDisplay : FXDisplay
     {
+        #region 属性字段
+
         private AudioSource m_AudioSource;
+
+        #endregion
+
+        #region 内部实现
 
         protected override void OnShowFx()
         {
@@ -26,5 +32,7 @@ namespace FX
 
             base.Awake();
         }
+
+        #endregion
     }
 }

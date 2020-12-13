@@ -7,6 +7,8 @@ namespace Common
     /// </summary>
     public class DataMgr : MonoSingleton<DataMgr>
     {
+        #region 属性字段
+
         #region Layers
 
         public int GroundLayer { get; private set; }
@@ -34,6 +36,12 @@ namespace Common
 
         public readonly float GameOverTimeScale = 0.2f;
 
+        public readonly string ClickSound = "OnHighlightSound";
+
+        #endregion
+
+        #region 内部实现
+
         protected override void Awake()
         {
             GroundLayer = LayerMask.NameToLayer("Ground");
@@ -43,5 +51,7 @@ namespace Common
 
             base.Awake();
         }
+
+        #endregion
     }
 }

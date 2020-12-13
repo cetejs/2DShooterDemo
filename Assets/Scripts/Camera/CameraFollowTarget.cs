@@ -7,6 +7,8 @@ namespace Camera
     /// </summary>
     public class CameraFollowTarget : MonoBehaviour
     {
+        #region 属性字段
+
         [Header("跟随的目标")]
         public Transform target;
         [Header("与跟随目标的偏移向量")]
@@ -15,6 +17,10 @@ namespace Camera
         public float followModifier = 5f;
 
         private Vector3 m_RealOffset;
+
+        #endregion
+
+        #region 内部实现
 
         private void Start()
         {
@@ -29,5 +35,7 @@ namespace Camera
             targetPosition.z = transform.position.z;
             transform.position = Vector3.Lerp(transform.position, targetPosition, followModifier * Time.deltaTime);
         }
+
+        #endregion
     }
 }

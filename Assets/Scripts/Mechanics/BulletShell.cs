@@ -6,10 +6,16 @@ namespace Mechanics
     [RequireComponent(typeof(Rigidbody2D))]
     public class BulletShell : MonoBehaviour
     {
+        #region 属性字段
+
         private Rigidbody2D m_Rigidbody2D;
         private SpriteRenderer m_SpriteRenderer;
 
         private int m_SortingOrder;
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 弹壳弹出
@@ -18,6 +24,10 @@ namespace Mechanics
         {
             m_Rigidbody2D.AddForce(power);
         }
+
+        #endregion
+
+        #region 内部实现
 
         private void Awake()
         {
@@ -36,5 +46,7 @@ namespace Mechanics
         {
             m_SpriteRenderer.sortingOrder = DataMgr.Instance.DisableShellSortingOrder;
         }
+
+        #endregion
     }
 }

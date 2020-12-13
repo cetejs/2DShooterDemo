@@ -11,6 +11,8 @@ namespace Mechanics
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public class Bullet : MonoBehaviour
     {
+        #region 属性字段
+
         [Header("发射速度")]
         public float launchSpeed = 1;
         [Header("击中特效预制名")]
@@ -21,6 +23,10 @@ namespace Mechanics
         public int beatBackPower = 1;
 
         private Rigidbody2D m_Rigidbody2D;
+
+        #endregion
+
+        #region 内部实现
 
         private void Awake()
         {
@@ -72,5 +78,7 @@ namespace Mechanics
 
             ObjPoolMgr.Instance.RecycleObj(gameObject);
         }
+
+        #endregion
     }
 }

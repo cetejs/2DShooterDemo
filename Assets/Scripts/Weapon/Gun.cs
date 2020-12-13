@@ -9,12 +9,18 @@ namespace Weapon
     /// </summary>
     public class Gun : MonoBehaviour, IGun
     {
+        #region 属性字段
+
         [Header("弹夹中子弹的名称")]
         public string bulletPrefName = "pref_Bullet";
         [Header("枪口，发射点")]
         public Transform muzzle;
         [Header("随机角度")]
         public float randomAngleRange = 0.5f;
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 开火
@@ -27,5 +33,7 @@ namespace Weapon
             bullet.transform.position = muzzle.position;
             bullet.transform.eulerAngles = eulerAngles;
         }
+
+        #endregion
     }
 }

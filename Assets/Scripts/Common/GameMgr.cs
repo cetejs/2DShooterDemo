@@ -11,6 +11,8 @@ namespace Common
     /// </summary>
     public class GameMgr : MonoSingleton<GameMgr>
     {
+        #region 属性字段
+
         [Header("主角控制器")]
         public PlayerController playerController;
         [Header("相机震动器")]
@@ -40,6 +42,10 @@ namespace Common
 
         private bool m_IsTransiting = false;
 
+        #endregion
+
+        #region 内部实现
+
         private void Start()
         {
             playerController.controlEnabled = false;
@@ -53,19 +59,33 @@ namespace Common
                 if (Input.GetButtonDown("Revive"))
                 {
                     playerController.Revive(playerRevivePoint);
+                    SoundMgr.Instance.PlayClickSound();
                 }
 
                 //清理尸体、弹壳
                 if (Input.GetButtonDown("Clean Scene"))
                 {
-                    OnNeedRecycleAllEnemies(enemySpawner.temp);
-                    OnNeedRecycleAllCommonObjs("pref_BulletShell");
+                    if (OnNeedRecycleAllEnemies != null)
+                    {
+                        OnNeedRecycleAllEnemies(enemySpawner.temp);
+                    }
+                    if (OnNeedRecycleAllCommonObjs != null)
+                    {
+                        OnNeedRecycleAllCommonObjs("pref_BulletShell");
+                    }
+
+                    SoundMgr.Instance.PlayClickSound();
                 }
 
                 //呼出菜单
                 if (Input.GetButtonDown("Switch Menu"))
                 {
-                    TransitToMenu();
+                    if (Time.timeScale == 1)
+                    {
+                        TransitToMenu();
+                    }
+
+                    SoundMgr.Instance.PlayClickSound();
                 }
 
                 //暂停
@@ -79,6 +99,8 @@ namespace Common
                     {
                         Time.timeScale = 0;
                     }
+
+                    SoundMgr.Instance.PlayClickSound();
                 }
             }
             else
@@ -86,7 +108,12 @@ namespace Common
                 //切入战斗
                 if (Input.GetButtonDown("Switch Menu"))
                 {
-                    TransitToBattle();
+                    if (Time.timeScale == 1)
+                    {
+                        TransitToBattle();
+                    }
+
+                    SoundMgr.Instance.PlayClickSound();
                 }
             }
         }
@@ -118,5 +145,7 @@ namespace Common
                 m_IsTransiting = true;
             }
         }
+
+        #endregion
     }
 }

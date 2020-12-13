@@ -7,12 +7,18 @@ namespace Camera
     /// </summary>
     public class ShakeCamera : MonoBehaviour
     {
+        #region 属性字段
+
         private float m_ShakeStrength = 1f;
         private float m_ShakeDuration = 1f;
         private bool m_IsShaked = false;
         private Vector3 m_DeltaPositon;
 
         private const int ShakeAdjustValue = 100;
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 震动相机
@@ -48,6 +54,10 @@ namespace Camera
             Shake(10, 0.3f);
         }
 
+        #endregion
+
+        #region 内部实现
+
         private void Update()
         {
             if (m_IsShaked)
@@ -64,5 +74,7 @@ namespace Camera
                 transform.localPosition += m_DeltaPositon;
             }
         }
+
+        #endregion
     }
 }

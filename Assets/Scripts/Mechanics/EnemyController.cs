@@ -10,6 +10,8 @@ namespace Mechanics
     [RequireComponent(typeof(SpriteRenderer), typeof(Damageable))]
     public class EnemyController : KinematicObject, ICharacterController
     {
+        #region 属性字段
+
         [Header("最大移动速度")]
         public float maxSpeed = 4;
         [Header("持续跳跃向上的速度")]
@@ -34,6 +36,10 @@ namespace Mechanics
         private readonly int DeathSpeedX = 1;
         private readonly int DeathSpeedY = 5;
         private readonly int RealDeathSec = 3;
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 控制器是否活着
@@ -107,6 +113,10 @@ namespace Mechanics
             }
         }
 
+        #endregion
+
+        #region 内部实现
+
         protected override void Awake()
         {
             m_Animator = GetComponent<Animator>();
@@ -128,8 +138,11 @@ namespace Mechanics
 
         private void OnGamePause(bool paused)
         {
-            controlEnabled = !paused;
-            m_Move *= 0;
+            if (m_IsAlive)
+            {
+                controlEnabled = !paused;
+                m_Move *= 0;
+            }
         }
 
         protected override void Update()
@@ -163,11 +176,15 @@ namespace Mechanics
 
         private void RealDeath()
         {
-            CancelInvoke();
-            m_Move *= 0;
-            m_Rigidbody2D.Sleep();
-            m_Collider2d.enabled = false;
-            enabled = false;
+            if (!m_IsAlive)
+            {
+                CancelInvoke();
+                m_Move *= 0;
+                m_Rigidbody2D.Sleep();
+                m_Collider2d.enabled = false;
+                enabled = false;
+
+            }
         }
 
         /// <summary>
@@ -255,5 +272,7 @@ namespace Mechanics
             InFlight,
             Landed
         }
+
+        #endregion
     }
 }

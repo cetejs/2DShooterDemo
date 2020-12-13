@@ -9,10 +9,16 @@ namespace FX
     [RequireComponent(typeof(Animator))]
     public class FXDisplay : ObjRecycler
     {
+        #region 属性字段
+
         [Header("设置决定特效触发的参数")]
         public string fxTriggerParame;
 
         private Animator m_Animator;
+
+        #endregion
+
+        #region 外部接口
 
         /// <summary>
         /// 展示特效
@@ -23,6 +29,10 @@ namespace FX
             OnShowFx();
         }
 
+        #endregion
+
+        #region 内部实现
+
         protected virtual void OnShowFx() { }
 
         protected override void Awake()
@@ -31,5 +41,7 @@ namespace FX
 
             base.Awake();
         }
+
+        #endregion
     }
 }
