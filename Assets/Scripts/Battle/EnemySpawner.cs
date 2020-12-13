@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Common;
+using Extend;
 
 namespace Battle
 {
@@ -33,17 +34,37 @@ namespace Battle
             CancelInvoke("SpawnEnemy");
         }
 
-        private void Start()
+        //private void Start()
+        //{
+        //    StartSpawn();
+        //}
+
+        private void Awake()
         {
-            StartSpawn();
+            GameMgr.Instance.OnGamePause += OnGamePause;
+        }
+
+        private void OnDestroy()
+        {
+            GameMgr.Instance.OnGamePause -= OnGamePause;
+        }
+
+        private void OnGamePause(bool paused)
+        {
+            if (paused)
+            {
+                StopSpawn();
+            }
+            else
+            {
+                StartSpawn();
+            }
         }
 
         private void SpawnEnemy()
         {
             GameObject enemy = ObjPoolMgr.Instance.SpawnObj(enemyPrefName);
-            enemy.transform.position = temp.position;
-            enemy.transform.rotation = temp.rotation;
-            enemy.transform.localScale = temp.localScale;
+            enemy.transform.SetTransform(temp);
         }
     }
 }

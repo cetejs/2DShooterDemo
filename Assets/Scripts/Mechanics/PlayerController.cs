@@ -102,7 +102,20 @@ namespace Mechanics
             m_Gun = GetComponentInChildren<IGun>();
             m_Damageable = GetComponent<Damageable>();
 
+            GameMgr.Instance.OnGamePause += OnGamePause;
+
             base.Awake();
+        }
+
+        private void OnDestroy()
+        {
+            GameMgr.Instance.OnGamePause -= OnGamePause;
+        }
+
+        private void OnGamePause(bool paused)
+        {
+            controlEnabled = !paused;
+            m_Move *= 0;
         }
 
         protected override void Update()

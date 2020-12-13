@@ -93,13 +93,5 @@ namespace Battle
         {
             health = Mathf.Max(health - value, 0);
         }
-
-        /// <summary>
-        /// 受伤结束后的动画事件
-        /// </summary>
-        private void OnHittedEvent()
-        {
-            m_CharacterController.OnHitted();
-        }
     }
 }

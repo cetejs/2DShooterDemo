@@ -19,11 +19,6 @@ namespace Mechanics
         void Hit();
 
         /// <summary>
-        /// 角色受击后恢复行动
-        /// </summary>
-        void OnHitted();
-
-        /// <summary>
         /// 角色死亡
         /// </summary>
         /// <param name="deathDir">死亡方向</param>

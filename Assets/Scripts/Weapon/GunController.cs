@@ -19,9 +19,12 @@ namespace Weapon
         public float shootRate = 1f;
         [Header("后坐力")]
         public float recoilForce = 1f;
-
         [Header("假枪，用于显示空枪动画")]
         public GameObject fakeGun;
+        [Header("弹壳预制名称")]
+        public string shellPrefName = "pref_BulletShell";
+        [Header("弹壳出口")]
+        public Transform shellExit;
 
         private float m_Timer;
 
@@ -29,6 +32,9 @@ namespace Weapon
         private KinematicObject m_User;
         private Animator m_Animator;
         private AudioSource m_AudioSource;
+        private Vector2 m_ShellPower;
+
+        private readonly Vector2 ShellPower = new Vector2(-10, 8);
 
         /// <summary>
         /// 开火
@@ -52,6 +58,10 @@ namespace Weapon
             m_Timer = 1 / shootRate;
             flashFXDisplay.ShowFX();
             GameMgr.Instance.shakeCamera.FireShake();
+            Rigidbody2D shell = ObjPoolMgr.Instance.SpawnObj<Rigidbody2D>(shellPrefName);
+            shell.transform.SetTransform(shellExit);
+            m_ShellPower.x = transform.lossyScale.x * ShellPower.x;
+            shell.AddForce(m_ShellPower);
 
             foreach (Gun gun in m_Guns)
             {
@@ -71,6 +81,8 @@ namespace Weapon
             m_User = GetComponentInParent<KinematicObject>();
             m_Animator = GetComponent<Animator>();
             m_AudioSource = GetComponent<AudioSource>();
+
+            m_ShellPower.y = ShellPower.y;
         }
 
         private void Start()

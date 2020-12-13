@@ -54,11 +54,11 @@ namespace Mechanics
         }
 
         /// <summary>
-        /// 角色受击后恢复行动
+        /// 角色受击后恢复行动，通过动画事件调用
         /// </summary>
-        public void OnHitted()
+        private void OnHittedEvent()
         {
-            if (m_IsAlive)
+            if (m_IsAlive && !GameMgr.Instance.IsMenuDisplay)
             {
                 controlEnabled = true;
             }
@@ -73,7 +73,7 @@ namespace Mechanics
             Bounce(DeathSpeedY);
             m_Animator.SetBool("IsDeath", true);
             controlEnabled = m_IsAlive = false;
-            m_SpriteRenderer.sortingOrder = -1;
+            m_SpriteRenderer.sortingOrder = DataMgr.Instance.DisableEnemySortingOrder;
             m_Collider2d.isTrigger = true;
 
             //容错处理卡住往上升的情况
@@ -114,9 +114,22 @@ namespace Mechanics
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
             m_SortingOrder = m_SpriteRenderer.sortingOrder;
 
+            GameMgr.Instance.OnGamePause += OnGamePause;
             GameMgr.Instance.OnNeedRecycleAllEnemies += Revive;
 
             base.Awake();
+        }
+
+        private void OnDestroy()
+        {
+            GameMgr.Instance.OnGamePause -= OnGamePause;
+            GameMgr.Instance.OnNeedRecycleAllEnemies -= Revive;
+        }
+
+        private void OnGamePause(bool paused)
+        {
+            controlEnabled = !paused;
+            m_Move *= 0;
         }
 
         protected override void Update()
@@ -146,11 +159,6 @@ namespace Mechanics
             {
                 RealDeath();
             }
-        }
-
-        private void OnDestroy()
-        {
-            GameMgr.Instance.OnNeedRecycleAllEnemies -= Revive;
         }
 
         private void RealDeath()

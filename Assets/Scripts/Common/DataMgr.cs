@@ -23,6 +23,15 @@ namespace Common
 
         #endregion
 
+
+        #region SortingOrder
+
+        public readonly int DisableEnemySortingOrder = -2;
+        public readonly int DisableShellSortingOrder = -1;
+
+        #endregion
+
+
         public readonly float GameOverTimeScale = 0.2f;
 
         protected override void Awake()

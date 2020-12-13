@@ -35,7 +35,7 @@ namespace Common
         /// <typeparam name="T"></typeparam>
         /// <param name="prefName"></param>
         /// <returns></returns>
-        public T SpawnObj<T>(string prefName) where T : MonoBehaviour
+        public T SpawnObj<T>(string prefName) where T : Component
         {
             return SpawnObj(prefName).GetComponent<T>();
         }
