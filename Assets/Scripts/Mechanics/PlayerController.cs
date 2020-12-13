@@ -31,12 +31,15 @@ namespace Mechanics
         private bool m_IsJumped;
         private bool m_IsStopJump;
         private bool m_IsAlive = true;
+        
         private Vector2 m_Move;
         private JumpState m_JumpState = JumpState.Grounded;
 
         private Animator m_Animator;
         private Damageable m_Damageable;
         private IGun m_Gun;
+
+        public bool IsFallToGround { get; private set; } = true;
 
         private readonly int DeathSpeedX = 1;
         private readonly int DeathSpeedY = 5;
@@ -73,6 +76,7 @@ namespace Mechanics
             m_Animator.SetBool("IsDeath", true);
             m_IsAlive = false;
             controlEnabled = false;
+            IsFallToGround = false;
             Time.timeScale = DataMgr.Instance.GameOverTimeScale;
             //m_Collider2d.enabled = false;
         }
@@ -83,7 +87,7 @@ namespace Mechanics
         /// <param name="point"></param>
         public void Revive(Transform point)
         {
-            if (!m_IsAlive && IsGrounded)
+            if (!m_IsAlive && IsFallToGround)
             {
                 Teleport(point.position);
                 transform.rotation = point.rotation;
@@ -183,6 +187,7 @@ namespace Mechanics
             {
                 m_Move *= 0;
                 Time.timeScale = 1;
+                IsFallToGround = true;
             }
         }
 

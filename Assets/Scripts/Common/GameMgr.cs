@@ -22,7 +22,15 @@ namespace Common
         [Header("敌人孵化器")]
         public EnemySpawner enemySpawner;
 
+        /// <summary>
+        /// 是否是菜单界面展示
+        /// </summary>
         public bool IsMenuDisplay { get; private set; } = true;
+
+        /// <summary>
+        /// 游戏是否暂停，正在意义上当暂停
+        /// </summary>
+        public bool IsGamePaused { get; private set; }
 
         /// <summary>
         /// 游戏暂停事件，非正在意义上的暂停
@@ -77,10 +85,10 @@ namespace Common
                     SoundMgr.Instance.PlayClickSound();
                 }
 
-                //呼出菜单
+                //呼出菜单，在死亡动画期间无法操作
                 if (Input.GetButtonDown("Switch Menu"))
                 {
-                    if (Time.timeScale == 1)
+                    if (playerController.IsFallToGround && !IsGamePaused)
                     {
                         TransitToMenu();
                     }
@@ -94,10 +102,12 @@ namespace Common
                     if (Time.timeScale == 0)
                     {
                         Time.timeScale = 1;
+                        IsGamePaused = false;
                     }
                     else if (Time.timeScale == 1)
                     {
                         Time.timeScale = 0;
+                        IsGamePaused = true;
                     }
 
                     SoundMgr.Instance.PlayClickSound();
@@ -105,14 +115,10 @@ namespace Common
             }
             else
             {
-                //切入战斗
+                //切入战斗，在死亡动画期间无法操作
                 if (Input.GetButtonDown("Switch Menu"))
                 {
-                    if (Time.timeScale == 1)
-                    {
-                        TransitToBattle();
-                    }
-
+                    TransitToBattle();
                     SoundMgr.Instance.PlayClickSound();
                 }
             }
